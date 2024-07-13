@@ -24,12 +24,12 @@ cursor = connection.cursor()
 def init_todo_db():
     """Function to initialize the to-do list database by creating and populating the table."""
      # Get the database name from the environment variable
-    db_name = os.getenv('MYSQL_DATABASE')
+    db_name = os.getenv('MYSQL_DATABASE_DB')
     
     # Drop table if it exists
-    drop_table = 'DROP TABLE IF EXISTS {db_name}.todos;'
+    drop_table = f'DROP TABLE IF EXISTS {db_name}.todos;'
     # Create new table
-    tristan = """
+    todos_table = f"""
     CREATE TABLE {db_name}.todos(
     task_id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(100) NOT NULL,
@@ -39,7 +39,7 @@ def init_todo_db():
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     """
     # Insert data into table
-    data = """
+    data = f"""
     INSERT INTO {db_name}.todos (title, description, is_done)
     VALUES
         ("Learning docker", "Finishing all topics", 1 ),
