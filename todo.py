@@ -21,13 +21,13 @@ connection.autocommit(True)
 cursor = connection.cursor()
 
 # Function to initialize to-do database
-def init_todo_db():
+def init_tristan():
     """Function to initialize the to-do list database by creating and populating the table."""
     # Drop table if it exists
-    drop_table = 'DROP TABLE IF EXISTS todo_db.todos;'
+    drop_table = 'DROP TABLE IF EXISTS tristan.todos;'
     # Create new table
-    todos_table = """
-    CREATE TABLE todo_db.todos(
+    tristan = """
+    CREATE TABLE tristan.todos(
     task_id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(100) NOT NULL,
     description VARCHAR(200),
@@ -37,14 +37,14 @@ def init_todo_db():
     """
     # Insert data into table
     data = """
-    INSERT INTO todo_db.todos (title, description, is_done)
+    INSERT INTO tristan.todos (title, description, is_done)
     VALUES
         ("Learning docker", "Finishing all topics", 1 ),
         ("Ansible topics", "Just forgot. Need to revise again.", 0),
         ("Work on Belt exam", "Solve all the questions and get black belt", 0);
     """
     cursor.execute(drop_table)
-    cursor.execute(todos_table)
+    cursor.execute(tristan)
     cursor.execute(data)
 
 def get_all_tasks():
