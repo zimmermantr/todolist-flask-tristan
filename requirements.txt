@@ -3,3 +3,4 @@ flask-mysql
 cryptography
 flask_cors
 gunicorn==21.2.0
+python-dotenv==1.0.0
