@@ -9,11 +9,11 @@ app = Flask(__name__)
 CORS(app)
 
 # Configuring MySQL database
-app.config['MYSQL_DATABASE_HOST'] = os.environ.get('MYSQL_DATABASE_HOST')
-app.config['MYSQL_DATABASE_USER'] = os.environ.get('MYSQL_DATABASE_USER')
-app.config['MYSQL_DATABASE_PASSWORD'] = os.environ.get('MYSQL_DATABASE_PASSWORD')
-app.config['MYSQL_DATABASE_DB'] = os.environ.get('MYSQL_DATABASE_DB')
-app.config['MYSQL_DATABASE_PORT'] = os.environ.get('MYSQL_DATABASE_PORT')
+app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DATABASE_HOST')
+app.config['MYSQL_DATABASE_USER'] = os.getenv('MYSQL_DATABASE_USER')
+app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('MYSQL_DATABASE_PASSWORD')
+app.config['MYSQL_DATABASE_DB'] = os.getenv('MYSQL_DATABASE_DB')
+app.config['MYSQL_DATABASE_PORT'] = int(os.getenv('MYSQL_DATABASE_PORT'))
 mysql = MySQL()
 mysql.init_app(app)
 connection = mysql.connect()
@@ -21,13 +21,16 @@ connection.autocommit(True)
 cursor = connection.cursor()
 
 # Function to initialize to-do database
-def init_tristan():
+def init_todo_db():
     """Function to initialize the to-do list database by creating and populating the table."""
+     # Get the database name from the environment variable
+    db_name = os.getenv('MYSQL_DATABASE')
+    
     # Drop table if it exists
-    drop_table = 'DROP TABLE IF EXISTS tristan.todos;'
+    drop_table = 'DROP TABLE IF EXISTS {db_name}.todos;'
     # Create new table
     tristan = """
-    CREATE TABLE tristan.todos(
+    CREATE TABLE {db_name}.todos(
     task_id INT NOT NULL AUTO_INCREMENT,
     title VARCHAR(100) NOT NULL,
     description VARCHAR(200),
@@ -37,14 +40,14 @@ def init_tristan():
     """
     # Insert data into table
     data = """
-    INSERT INTO tristan.todos (title, description, is_done)
+    INSERT INTO {db_name}.todos (title, description, is_done)
     VALUES
         ("Learning docker", "Finishing all topics", 1 ),
         ("Ansible topics", "Just forgot. Need to revise again.", 0),
         ("Work on Belt exam", "Solve all the questions and get black belt", 0);
     """
     cursor.execute(drop_table)
-    cursor.execute(tristan)
+    cursor.execute(todos_table)
     cursor.execute(data)
 
 def get_all_tasks():
